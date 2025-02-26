@@ -93,8 +93,8 @@ public class Restaurant{
             BufferedWriter fichier = new BufferedWriter(new FileWriter(nomFichier + ".txt"));
 
             for (int i = 0; i < this.commandes.size(); i++){
-                fichier.write(this.commandes.get(i).afficherCommande());
-                System.out.println(this.commandes.get(i).afficherCommande());
+                fichier.write(this.commandes.get(i).plats.get(i).toString());
+                System.out.println("--------------------");
             }
             fichier.close();
 
@@ -112,7 +112,11 @@ public class Restaurant{
             String line = reader.readLine();
             while (line != null){
                 System.out.println(line);
+                System.out.println("--------------------");
+                Commande com = new Commande();
+//                com.ajouterPlat(line);
                 line = reader.readLine();
+
             }
             
         } catch (Exception e) {

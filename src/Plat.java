@@ -9,10 +9,10 @@ public class Plat {
     String ingredients;
     String typeCuisne;
     String  tempsPreparation;
-    float prixSpecial;
+    Float prixSpecial;
     String URL;
 
-    public Plat(String nom, String description, float prix, String calories, String taillePortion, String dateAjout, boolean disponible, String ingredients, String typeCuisne, String tempsPreparation, float prixSpecial, String URL) {
+    public Plat(String nom, String description, float prix, String calories, String taillePortion, String dateAjout, boolean disponible, String ingredients, String typeCuisne, String tempsPreparation, Float prixSpecial, String URL) {
         this.nom = nom;
         this.description = description;
         this.prix = prix;
@@ -27,10 +27,14 @@ public class Plat {
         this.URL = URL;
     }
 
-    @Override
+    public String getNom() {
+        return this.nom;
+    }
+
     public String toString() {
         return "[ Nom = " + this.nom + ", Description = " + this.description + ", Prix = " + this.prix + ", Calories = " + this.calories + ", Taille de la portion = " + this.taillePortion + ", Date d'ajout = " + this.dateAjout + ", Disponible = " + this.disponible + ", Ingrédients = " + this.ingredients + ", Type de cuisine = " + this.typeCuisne + ", Temps de préparation = " + this.tempsPreparation + ", Prix spécial = " + this.prixSpecial + ", URL = " + this.URL + "]";
     }
+
 
     
 }

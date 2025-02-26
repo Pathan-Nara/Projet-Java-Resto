@@ -43,7 +43,11 @@ public class Menu{
 
     @Override
     public String toString() {
-        return "dateCreation=" + dateCreation + ", id=" + id + ", nomMenu=" + nomMenu + ", plats=" + plats + ", typeMenu=" + typeMenu;
+        String pla = "";
+        for(int i =0; i<this.plats.size(); i++){
+            pla += this.plats.get(i).nom + " " + this.plats.get(i).prix + "\n";
+        }
+        return "dateCreation=" + dateCreation + ", id=" + id + ", nomMenu=" + nomMenu + ", plats=" + pla + ", typeMenu=" + typeMenu;
     }
 
 }

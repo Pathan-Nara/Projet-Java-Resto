@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.File;
+
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -11,7 +13,6 @@ public class App {
         int indiceResto = 0;
         int boucleChoixPlat = 1;
         ArrayList<Restaurant> listRestaurants = new ArrayList<Restaurant>();
-        ArrayList<Commande> listCommandes = new ArrayList<Commande>();
 
         System.out.println("Bienvenu dans notre application de gestion de restaurant \n");
         Scanner scan = new Scanner(System.in);
@@ -42,7 +43,7 @@ public class App {
                     idRest++;
                     System.out.println("Operation terminé appuyez sur un bouton pour continuer");
                     test = next.nextLine();
-                    break;
+                break;
 
                     
                     
@@ -58,7 +59,7 @@ public class App {
                     System.out.println("-----------------------------");
                     System.out.println("Operation terminé appuyez sur un bouton pour continuer");
                     test = next.nextLine();
-                    break;
+                break;
 
                     
                     
@@ -92,7 +93,7 @@ public class App {
                     idEmp++;
                     System.out.println("Operation terminé appuyez sur un bouton pour continuer");
                     test = next.nextLine();
-                    break;
+                break;
 
                     
                     
@@ -117,13 +118,10 @@ public class App {
                     next.nextLine();
                     System.out.println("Combien de calories contient le plat ?");
                     String calories = next.nextLine();
-                    next.nextLine();
                     System.out.println("Quelle est la taille de la portion ?");
                     String taillePortion = next.nextLine();
-                    next.nextLine();
                     System.out.println("Quelle est la date d'ajout du plat ?");
                     String dateAjout = next.nextLine();
-                    next.nextLine();
                     System.out.println("Le plat est-il disponible ? (true/false)");
                     boolean disponible = next.nextBoolean();
                     next.nextLine();
@@ -133,17 +131,22 @@ public class App {
                     String typeCuisine = next.nextLine();
                     System.out.println("Quel est le temps de préparation du plat ?");
                     String tempsPreparation = next.nextLine();
+                    System.out.println("Y'a t'il un prix special au plat ? (True/False)");
+                    Boolean isSpecial = next.nextBoolean();
                     next.nextLine();
-                    System.out.println("Quel est le prix spécial du plat ?");
-                    float prixSpecial = next.nextFloat();
-                    next.nextLine();
+                    Float prixSpecial = null;
+                    if(isSpecial == true){
+                        System.out.println("Quel est le prix spécial du plat ?");
+                        prixSpecial = next.nextFloat();
+                        next.nextLine();
+                    }
                     System.out.println("Quelle est l'URL de l'image du plat ?");
                     String URL = next.nextLine();
                     Plat plat = new Plat(nomPlat, description, prix, calories, taillePortion, dateAjout, disponible, ingredients, typeCuisine, tempsPreparation, prixSpecial, URL);
                     listRestaurants.get(indiceResto-1).menu.ajouterPlat(plat);
                     System.out.println("Operation terminé appuyez sur un bouton pour continuer");
                     test = next.nextLine();
-                    break;
+                break;
 
 
 
@@ -179,7 +182,7 @@ public class App {
 
                     System.out.println("Operation terminé appuyez sur un bouton pour continuer");
                     test = next.nextLine();
-                    break;
+                break;
 
                     
                     
@@ -222,7 +225,7 @@ public class App {
                     
                     System.out.println("Operation terminé appuyez sur un bouton pour continuer");
                     test = next.nextLine();
-                    break;
+                break;
 
                     
                     
@@ -257,6 +260,7 @@ public class App {
                             next.nextLine();
                             break;
                         } else{
+                            System.out.println(listRestaurants.get(indiceResto-1).menu.plats.get(indicePlat-1));
                             commande.ajouterPlat(listRestaurants.get(indiceResto-1).menu.plats.get(indicePlat-1));
                         }
                         System.out.println("Voulez vous commander un autre plat ? (1/0)");
@@ -264,51 +268,102 @@ public class App {
                         next.nextLine();
                     }
                     boucleChoixPlat = 1;
-                    listCommandes.add(commande);
+                    listRestaurants.get(indiceResto-1).commandes.add(commande);
                     System.out.println("Voici votre commande : \n" + commande.afficherCommande());
                     
                     test = next.nextLine();
-                    break;
+                break;
 
                     
                     
                 case 8:
-                    System.out.println("Vous avez choisi d'afficher toutes les commandes d'un restaurant");
+                    System.out.println("Vous avez choisi d'afficher toutes les commandes d'un restaurant \n Choisissez le restaurant dont vous voulez voir les commandes :");
+                    for (int i = 0; i < listRestaurants.size(); i++){
+                        System.out.println("-----------------------------");
+                        System.out.println("Restaurant numero " + (i+1) + ": " + listRestaurants.get(i).getNom());
+                    }
+                    indiceResto = next.nextInt();
+                    next.nextLine();
+                    if(indiceResto > listRestaurants.size()){
+                        System.out.println("Ce restaurant n'existe pas");
+                        next.nextLine();
+                        break;
+                    } else if(listRestaurants.get(indiceResto-1).menu.plats.isEmpty()){
+                        System.out.println("Nous sommes dans le regret de vous annoncer que le menu de ce restaurant est en cours de préparation.");
+                        next.nextLine();
+                        break;
+                    }
+                    for(int i = 0; i < listRestaurants.get(indiceResto-1).commandes.size(); i++){
+                        System.out.println("-----------------------------");
+                        System.out.println("Commande numero " + (i+1) + ": \n" + listRestaurants.get(indiceResto-1).commandes.get(i).afficherCommande());
+                    }
                     System.out.println("Operation terminé appuyez sur un bouton pour continuer");
                     test = next.nextLine();
-                    break;
+                break;
 
                     
-                    
                 case 9:
-                    System.out.println("Vous avez choisi de sauvegarder les commandes d'un restaurant");
+                    System.out.println("Vous avez choisi de sauvegarder les commandes d'un restaurant \n choississez le restaurant dont vous voulez sauvegarder les commandes :");
+                    for (int i = 0; i < listRestaurants.size(); i++){
+                        System.out.println("-----------------------------");
+                        System.out.println("Restaurant numero " + (i+1) + ": " + listRestaurants.get(i).getNom());
+                    }
+                    indiceResto = next.nextInt();
+                    next.nextLine();
+                    if(indiceResto > listRestaurants.size()){
+                        System.out.println("Ce restaurant n'existe pas");
+                        next.nextLine();
+                        break;
+                    } else if(listRestaurants.get(indiceResto-1).menu.plats.isEmpty()){
+                        System.out.println("Nous sommes dans le regret de vous annoncer que le menu de ce restaurant est en cours de préparation.");
+                        next.nextLine();
+                        break;
+                    }
+                    System.out.println("Sauvegarde en cours...");
+                    listRestaurants.get(indiceResto-1).sauvegarderCommandes("commandes du restaurant " + listRestaurants.get(indiceResto-1).getNom());
                     System.out.println("Operation terminé appuyez sur un bouton pour continuer");
                     test = next.nextLine();
-                    break;
+                break;
 
                     
                     
                 case 10:
-                    System.out.println("Vous avez choisi de charger les commandes d'un restaurant");
-                    System.out.println("Operation terminé appuyez sur un bouton pour continuer");
+                    System.out.println("Vous avez choisi de charger les commandes d'un restaurant \n choississez le restaurant dont vous voulez charger les commandes :");
+                    for (int i = 0; i < listRestaurants.size(); i++){
+                        System.out.println("-----------------------------");
+                        System.out.println("Restaurant numero " + (i+1) + ": " + listRestaurants.get(i).getNom());
+                    }
+                    indiceResto = next.nextInt();
+                    next.nextLine();
+                    if(indiceResto > listRestaurants.size()){
+                        System.out.println("Ce restaurant n'existe pas");
+                        next.nextLine();
+                        break;
+                    } 
+                    String fileName = "commandes du restaurant " + listRestaurants.get(indiceResto-1).getNom() + ".txt";
+                    File file = new File(fileName);
+                    if(file.exists()){
+                        System.out.println("Chargement en cours...");
+                        listRestaurants.get(indiceResto-1).chargerCommande(fileName);
+                        System.out.println("Operation terminé appuyez sur un bouton pour continuer");
+                    } else {
+                        System.out.println("Le fichier " + fileName + " n'existe pas.");
+                        System.out.println("Operation terminé appuyez sur un bouton pour continuer");
+                    }
                     test = next.nextLine();
-                    break;
+                break;
 
-                    
+                case 11:
+                    boucle = 0;
+                break;
                     
                     
                 default:
                     System.out.println("Veuillez choisir un nombre entre 1 et 10");
                     System.out.println("Operation terminé appuyez sur un bouton pour continuer");
                     test = next.nextLine();
-                    break;
+                break;
 
-                    
-                    
-
-                case 11:
-                    boucle = 0;
-                    break;
             }
         }
 
