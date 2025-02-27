@@ -9,6 +9,57 @@ public class Restaurant{
     public ArrayList<Commande> commandes = new ArrayList<Commande>();
     public ArrayList<Employe> employes = new ArrayList<Employe>();
 
+    public static void chargerMenu(String fichier){
+        try {
+            
+            BufferedReader reader = new BufferedReader(new FileReader(fichier));
+            int id = Integer.parseInt(reader.readLine());
+            String nomMenu = reader.readLine();
+            int dateCreation = Integer.parseInt(reader.readLine());
+            String typeMenu = reader.readLine();
+            Menu menu = new Menu(id, nomMenu, dateCreation, typeMenu);
+            
+            reader.close();
+            String nomFichierPlats = "sauvegardes/" + "plats du menu " + nomMenu + ".txt";
+            if(!new File(nomFichierPlats).exists()){
+                System.out.println("Le fichier n'existe pas");
+                System.out.println(nomFichierPlats);
+            }
+            System.out.println("etape 1");
+            BufferedReader reader2 = new BufferedReader(new FileReader(nomFichierPlats));
+            int nbLigne = 0;
+            while(reader2.readLine() != null){
+                nbLigne++;
+            }
+            reader2.close();
+
+            System.out.println("etape 2");
+
+            BufferedReader reader3 = new BufferedReader(new FileReader(nomFichierPlats));
+            for(int i = 0; i < nbLigne/12; i++){
+                String nomPlat = reader3.readLine();
+                String description = reader3.readLine();
+                Float prix = Float.parseFloat(reader3.readLine());
+                String calories = reader3.readLine();
+                String taillePortion = reader3.readLine();
+                String dateAjout = reader3.readLine();
+                boolean disponible = Boolean.parseBoolean(reader3.readLine());
+                String ingredients = reader3.readLine();
+                String typeCuisne = reader3.readLine();
+                String tempsPreparation = reader3.readLine();
+                Float prixSpecial = Float.parseFloat(reader3.readLine());
+                String URL = reader3.readLine();
+                Plat plat = new Plat(nomPlat, description, prix, calories, taillePortion, dateAjout, disponible, ingredients, typeCuisne, tempsPreparation, prixSpecial, URL);
+                menu.ajouterPlat(plat);
+                System.out.println("ajout de plat");
+            }
+
+            System.out.println("etape 3");
+
+        } catch (Exception e) {
+        }
+    }
+
     public Restaurant(int id, String nomRestaurant, String adresse, String nomMenu, int dateCreation, String typeMenu){
         this.id = id;
         this.nomRestaurant = nomRestaurant;
@@ -93,7 +144,7 @@ public class Restaurant{
             BufferedWriter fichier = new BufferedWriter(new FileWriter(nomFichier + ".txt"));
 
             for (int i = 0; i < this.commandes.size(); i++){
-                fichier.write(this.commandes.get(i).plats.get(i).toString());
+                fichier.write(this.commandes.get(i).plats.get(i).exportPlat());
                 System.out.println("--------------------");
             }
             fichier.close();
@@ -123,4 +174,17 @@ public class Restaurant{
             e.printStackTrace();
         }
     }
+
+    public void sauvegarderRestaurant(String nomFichier){
+        try {
+            BufferedWriter fichier = new BufferedWriter(new FileWriter("sauvegardes/" + nomFichier + ".txt"));
+            fichier.write(this.id + "\n" + this.nomRestaurant + "\n" + this.adresse + "\n" + this.menu.nomMenu + "\n" + this.menu.dateCreation + "\n" + this.menu.typeMenu + "\n");
+            fichier.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+    }
+
+    
 }

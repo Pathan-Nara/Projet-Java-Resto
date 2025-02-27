@@ -1,9 +1,29 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.File;
+
+
 
 
 public class App {
+
+    public static void chargerRestaurant(String fichier, ArrayList<Restaurant> list){
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fichier));
+            int id = Integer.parseInt(reader.readLine());
+            String nom = reader.readLine();
+            String adresse = reader.readLine();
+            String nomMenu = reader.readLine();
+            int dateCreation = Integer.parseInt(reader.readLine());
+            String typeMenu = reader.readLine();
+            Restaurant rest = new Restaurant(id, nom, adresse, nomMenu, dateCreation, typeMenu);
+            list.add(rest);
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         int boucle = 1;
         String test = "";
@@ -19,7 +39,7 @@ public class App {
         Scanner next = new Scanner(System.in);
         while(boucle == 1){
 
-            System.out.println("Que souhaitez vous faire? \n 1: Ajouter un restaurant \n 2: Afficher la liste des restaurants \n 3: Ajouter un employé a un restaurant \n 4: Ajouter un plat au menu d'un restaurant \n 5: Supprimer un employé d'un restaurant \n 6: Afficher les employés d'un restaurant \n 7: Prendre une commande pour un restaurant \n 8: Afficher toutes les commandes d'un restaurant \n 9: Sauvegarder les commandes d'un restaurant \n 10: Charger les commandes d'un restaurant \n 11: Quitter");
+            System.out.println("Que souhaitez vous faire? \n 1: Ajouter un restaurant \n 2: Afficher la liste des restaurants \n 3: Ajouter un employé a un restaurant \n 4: Ajouter un plat au menu d'un restaurant \n 5: Supprimer un employé d'un restaurant \n 6: Afficher les employés d'un restaurant \n 7: Prendre une commande pour un restaurant \n 8: Afficher toutes les commandes d'un restaurant \n 9: Sauvegarder les commandes d'un restaurant \n 10: Charger les commandes d'un restaurant \n 11: Quitter \n 12: Sauvegarder un restaurant \n 13: Charger un restaurant \n 14: Sauvegarder un menu \n 15: Charger un menu");
             
             
             int choix = scan.nextInt();
@@ -351,13 +371,80 @@ public class App {
                         System.out.println("Operation terminé appuyez sur un bouton pour continuer");
                     }
                     test = next.nextLine();
+
                 break;
 
                 case 11:
                     boucle = 0;
                 break;
                     
-                    
+                case 12:
+                    System.out.println("Vous avez choisi de sauvegarder un restaurant \n choississez le restaurant que vous voulez sauvegarder :");
+                    for (int i = 0; i < listRestaurants.size(); i++){
+                        System.out.println("-----------------------------");
+                        System.out.println("Restaurant numero " + (i+1) + ": " + listRestaurants.get(i).getNom());
+                    }
+                    indiceResto = next.nextInt();
+                    next.nextLine();
+                    if(indiceResto > listRestaurants.size()){
+                        System.out.println("Ce restaurant n'existe pas");
+                        next.nextLine();
+                        break;
+                    }
+                    System.out.println("Sauvegarde en cours...");
+                    listRestaurants.get(indiceResto-1).sauvegarderRestaurant("restaurant " + listRestaurants.get(indiceResto-1).getNom());
+                    System.out.println("Operation terminé appuyez sur un bouton pour continuer");
+                    test = next.nextLine();
+                break;
+
+                case 13:
+                    System.out.println("Vous avez choisi de charger un restaurant \n Quel est le nom du restaurant que vous voulez charger ? :");
+                    String nomRest = next.nextLine();
+                    String fichierAcharger = "sauvegardes/" + "restaurant " + nomRest + ".txt";
+                    System.out.println(fichierAcharger);
+                    chargerRestaurant(fichierAcharger, listRestaurants);
+                    System.out.println("Operation terminé appuyez sur un bouton pour continuer");
+                    test = next.nextLine();
+                    System.out.println(listRestaurants.get(0).getNom());
+                break;
+
+                case 14:
+                    System.out.println("Vous avez choisi de sauvegarder un menu \n choississez le restaurant dont vous voulez sauvegarder le menu :");
+                    for (int i = 0; i < listRestaurants.size(); i++){
+                        System.out.println("-----------------------------");
+                        System.out.println("Restaurant numero " + (i+1) + ": " + listRestaurants.get(i).getNom());
+                    }
+                    indiceResto = next.nextInt();
+                    next.nextLine();
+                    if(indiceResto > listRestaurants.size()){
+                        System.out.println("Ce restaurant n'existe pas");
+                        next.nextLine();
+                        break;
+                    }
+                    System.out.println("Sauvegarde en cours...");
+                    listRestaurants.get(indiceResto-1).menu.sauvegarderMenu(listRestaurants.get(indiceResto-1).getNom());
+                    System.out.println("Operation terminé appuyez sur un bouton pour continuer");
+                    test = next.nextLine();
+                break;
+
+                case 15:
+                    System.out.println("Vous avez choisi de charger un menu \n choississez le restaurant dont vous voulez charger le menu :");
+                    for (int i = 0; i < listRestaurants.size(); i++){
+                        System.out.println("-----------------------------");
+                        System.out.println("Restaurant numero " + (i+1) + ": " + listRestaurants.get(i).getNom());
+                    }
+                    indiceResto = next.nextInt();
+                    next.nextLine();
+                    if(indiceResto > listRestaurants.size()){
+                        System.out.println("Ce restaurant n'existe pas");
+                        next.nextLine();
+                        break;
+                    }
+                    String fichierAchargerMenu = "sauvegardes/" + "menu du restaurant " + listRestaurants.get(indiceResto-1).getNom() + ".txt";
+                    System.out.println(fichierAchargerMenu);
+                    listRestaurants.get(indiceResto-1).chargerMenu(fichierAchargerMenu);
+                    System.out.println("Operation terminé appuyez sur un bouton pour continuer");
+
                 default:
                     System.out.println("Veuillez choisir un nombre entre 1 et 10");
                     System.out.println("Operation terminé appuyez sur un bouton pour continuer");
