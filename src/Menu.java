@@ -1,5 +1,7 @@
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.io.*;
+
 public class Menu{
     public int id;
     public String nomMenu;
@@ -12,6 +14,7 @@ public class Menu{
         this.nomMenu = nomMenu;
         this.dateCreation = dateCreation;
         this.typeMenu = typeMenu;
+        this.plats = new ArrayList<Plat>();
     }
 
     public void ajouterPlat(Plat plat){
@@ -41,9 +44,41 @@ public class Menu{
         return "Le plat " + nomPlat + " n'est pas disponible";
     }
 
-    @Override
     public String toString() {
-        return "dateCreation=" + dateCreation + ", id=" + id + ", nomMenu=" + nomMenu + ", plats=" + plats + ", typeMenu=" + typeMenu;
+        String pla = "";
+        for(int i =0; i<this.plats.size(); i++){
+            pla += this.plats.get(i).nom + " " + this.plats.get(i).prix + "\n";
+        }
+        return "dateCreation=" + dateCreation + ", id=" + id + ", nomMenu=" + nomMenu + ", plats=" + pla + ", typeMenu=" + typeMenu;
+    }
+
+    public void sauvegarderMenu(String nomResto){
+        try {
+
+            BufferedWriter fichier = new BufferedWriter(new FileWriter("sauvegardes/" + "menu du restaurant " + nomResto + ".txt"));
+            
+            fichier.write(this.id + "\n" + this.nomMenu + "\n" + this.dateCreation + "\n" + this.typeMenu + "\n");
+            fichier.close();
+
+            BufferedWriter fichierPlat = new BufferedWriter(new FileWriter("sauvegardes/" + "plats du menu " + this.nomMenu + ".txt"));
+            for(int i =0; i<this.plats.size(); i++){
+                fichierPlat.write(this.plats.get(i).exportPlat() + "\n");
+            }
+            fichierPlat.close();
+
+        } catch (Exception e) {
+            
+            e.printStackTrace();
+        }
+
+    }
+
+    public String exportMenu(){
+        String pla = "";
+        for(int i =0; i<this.plats.size(); i++){
+            pla += this.plats.get(i).exportPlat() + "\n";
+        }
+        return this.id + "\n" + this.nomMenu + "\n" + this.dateCreation + "\n" + this.typeMenu + "\n" + pla;
     }
 
 }
